@@ -41,6 +41,49 @@ license {
     ],
 }
 
+cc_binary {
+    name: "zstd",
+
+    cflags: [
+        "-DZSTD_GZCOMPRESS",
+        "-DZSTD_GZDECOMPRESS",
+        "-DZSTD_LZ4COMPRESS",
+        "-DZSTD_LZ4DECOMPRESS",
+        "-DZSTD_MULTITHREAD",
+        "-Wall",
+        "-Werror",
+    ],
+
+    shared_libs: [
+        "liblz4",
+        "libz",
+        "libzstd",
+    ],
+
+    srcs: ["programs/*.c"],
+    system_ext_specific: true,
+
+    required: ["zstdgrep", "zstdless"],
+
+    symlinks: [
+        "zstdcat",
+        "zstdmt",
+        "unzstd",
+    ],
+}
+
+sh_binary {
+    name: "zstdgrep",
+    src: "programs/zstdgrep",
+    system_ext_specific: true,
+}
+
+sh_binary {
+    name: "zstdless",
+    src: "programs/zstdless",
+    system_ext_specific: true,
+}
+
 cc_library {
     name: "libzstd",
     min_sdk_version: "apex_inherit",
@@ -120,6 +163,7 @@ cc_defaults {
         "lib/dictBuilder",
         "tests/fuzz",
     ],
+    system_ext_specific: true,
     cflags: [
         "-Wno-error",
         "-Wno-pointer-arith",
